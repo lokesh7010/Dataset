@@ -1,0 +1,35 @@
+import pandas as pd
+import numpy as np
+
+# Set random seed for reproducibility
+np.random.seed(42)
+
+# Define number of rows and columns
+num_rows = 20
+num_cols = 30
+
+# Generate column names (e.g., feature1, feature2, ..., feature30)
+column_names = [f'feature{i+1}' for i in range(num_cols)]
+
+# Generate synthetic normal network traffic data
+normal_data = np.random.normal(loc=50, scale=10, size=(num_rows, num_cols))
+
+# Introduce a few anomalies in the data
+# Let's make rows 5 and 15 anomalous (higher deviation)
+normal_data[4] = np.random.normal(loc=100, scale=30, size=num_cols)  # Anomalous row
+normal_data[14] = np.random.normal(loc=5, scale=2, size=num_cols)    # Anomalous row
+
+# Create a DataFrame
+df = pd.DataFrame(normal_data, columns=column_names)
+
+# Add a label column for anomaly detection (0 = normal, 1 = anomaly)
+labels = [0] * num_rows
+labels[4] = 1   # anomaly
+labels[14] = 1  # anomaly
+df['label'] = labels
+
+# Show the dataset
+print(df)
+
+# Optional: Save to CSV
+df.to_csv("network_traffic_dataset.csv", index=False)
