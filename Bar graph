@@ -1,0 +1,50 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+# Load dataset (or use the df you generated)
+df = pd.read_csv("network_traffic_dataset.csv")
+
+# Separate feature columns
+feature_cols = [col for col in df.columns if col != 'label']
+
+# 1. Bar Plot: Mean of all features
+plt.figure(figsize=(14, 6))
+df[feature_cols].mean().plot(kind='bar', color='skyblue')
+plt.title("Mean Value of Each Feature")
+plt.xlabel("Features")
+plt.ylabel("Mean")
+plt.xticks(rotation=90)
+plt.tight_layout()
+plt.show()
+
+# 2. Bar Plot: Compare Normal vs Anomaly Mean Values
+plt.figure(figsize=(14, 6))
+normal_means = df[df['label'] == 0][feature_cols].mean()
+anomaly_means = df[df['label'] == 1][feature_cols].mean()
+
+width = 0.4
+x = np.arange(len(feature_cols))
+
+plt.bar(x - width/2, normal_means, width, label='Normal', color='green')
+plt.bar(x + width/2, anomaly_means, width, label='Anomaly', color='red')
+plt.xticks(ticks=x, labels=feature_cols, rotation=90)
+plt.xlabel("Features")
+plt.ylabel("Mean Values")
+plt.title("Feature Comparison: Normal vs Anomalous Traffic")
+plt.legend()
+plt.tight_layout()
+plt.show()
+
+# 3. Bar Plot: Highlighting Individual Anomalous Row (e.g., Row 5)
+anomaly_row = df.iloc[4][feature_cols]  # Row 5 (index 4)
+
+plt.figure(figsize=(14, 6))
+anomaly_row.plot(kind='bar', color='crimson')
+plt.title("Feature Values of Anomalous Row 5")
+plt.xlabel("Features")
+plt.ylabel("Value")
+plt.xticks(rotation=90)
+plt.tight_layout()
+plt.show()
